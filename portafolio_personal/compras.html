@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>carrito</title>
+</head>
+<body>
+
+    <h1 id="t">🛒 Carrito</h1>
+    <table id="p">
+        <thead><tr><th>Cosa</th><th>Precio</th><th>Añadir</th></tr></thead>
+        <tbody>
+            <tr data-id="1"><td>KYOGEN album ADO</td><td>$<span class="pr">350.00</span></td><td><button class="add">ADD</button></td></tr>
+            <tr data-id="2"><td>GYARU</td><td>$<span class="pr">100.00</span></td><td><button class="add">ADD</button></td></tr>
+            <tr data-id="2"><td>take me to the beatch</td><td>$<span class="pr">150.00</span></td><td><button class="add">ADD</button></td></tr>
+        </tbody>
+    </table>
+
+    <table id="c">
+        <thead><tr><th>Producto</th><th>Cant.</th><th>Subtotal</th><th>Quitar</th></tr></thead>
+        <tbody id="lc"></tbody>
+        <tfoot><tr><td colspan="2">TOTAL:</td><td>$<span id="total">0.00</span></td><td></td></tr></tfoot>
+    </table>
+    
+    <script>
+        let items = []; 
+        const $p = document.getElementById('p'); 
+        const $lc = document.getElementById('lc'); 
+        const $t = document.getElementById('total'); 
+
+        
+        function u() { 
+            $lc.innerHTML = ''; 
+            let total = 0; 
+
+            for (const i of items) { 
+                const sub = i.p * i.c;
+                total += sub;
+
+                const r = document.createElement('tr'); 
+                r.innerHTML = `
+                    <td>${i.n}</td>
+                    <td>${i.c}</td>
+                    <td>$${sub.toFixed(2)}</td>
+                    <td><button class="rem" data-id="${i.id}">X</button></td>
+                `;
+                $lc.appendChild(r);
+            }
+
+            $t.textContent = total.toFixed(2);
+        }
+
+        $p.addEventListener('click', (e) => {
+            if (e.target.classList.contains('add')) {
+                const r = e.target.closest('tr');
+                const id = r.dataset.id;
+                
+                const n = r.querySelector('td:nth-child(1)').textContent;
+                const p = parseFloat(r.querySelector('.pr').textContent);
+
+                const exists = items.find(item => item.id === id);
+
+                if (exists) {
+                    exists.c += 1; 
+                } else {
+                    items.push({ id, n, p, c: 1 });
+                }
+
+                u(); 
+            }
+        });
+
+        
+        $lc.addEventListener('click', (e) => {
+            if (e.target.classList.contains('rem')) {
+                const idToRemove = e.target.dataset.id;
+                items = items.filter(i => i.id !== idToRemove);
+                u(); 
+            }
+        });
+
+        
+        u();
+        <table id="c">
+        </table>
+        
+
+    
+    
+    </script>
+    <a href="pago_realizado.html">
+    <button>Proceder al Pago</button>
+</a>
+<ul><a href="index.html">volver</a></ul>
+
+</body>
+</html>
